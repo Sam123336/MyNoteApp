@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            color: #007bff;
+            text-align: center;
+        }
+        .note-title {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+           
+        }
+        .note-content {
+            color: #6c757d;
+        }
+        .note-card {
+            max-width: 20rem; /* Set maximum width for the card */
+            margin: 10px; /* Add margin around cards */
+        }
+        .btn {
+            margin-right: 10px; /* Add margin between buttons */
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #6c757d;
+        }
+        a .btn{
+            margin-right: 10px;
+        }
+        .card-body{
+            background-color: bisque;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Your Dashboard, <%= username %></h1>
+    <div class="d-flex flex-wrap">
+        <% notes.forEach(note => { %>
+            <div class="card mb-3 note-card">
+                <div class="card-body">
+                    <h5 class="card-title note-title"><%= note.title %></h5>
+                    <p class="card-text note-content"><%= note.content %></p>
+                    <p class="card-text timestamp">Created: <%= new Date(note.createdAt).toLocaleString() %></p>
+
+                    <div class="btn-group" role="group"> <!-- Button group -->
+                        <form action="/notes/<%= note._id %>/delete" method="POST">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <a href="/notes/<%= note._id %>/edit" class="btn btn-primary">Edit</a>
+                        <form action="/notes/<%= note._id %>/pin" method="POST">
+                            <button type="submit" class="btn <%= note.pinned ? 'btn-success' : 'btn-secondary' %>">
+                                <%= note.pinned ? 'Unpin' : 'Pin' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+    <a href="/notes/add-note" class="btn btn-success">Add Note</a>
+    <a href="/user/logout" class="btn btn-secondary">Logout</a>
+</div>
+  
+    
+    <!-- JavaScript to format timestamp -->
+    <script>
+        function formatTimestamp(timestamp) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+        return new Date(timestamp).toLocaleDateString('en-US', options);
+    }
+   
+    </script>
+    
+</body>
+</html>
